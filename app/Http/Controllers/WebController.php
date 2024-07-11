@@ -33,4 +33,19 @@ class WebController extends Controller
 
         return view('index', ['appointments' => $paginator]);
     }
+
+    public function login()
+    {
+        return view('login');
+    }
+
+    public function register()
+    {
+        return view('register');
+    }
+
+    public function logout()
+    {
+        return view('login');
+    }
 }

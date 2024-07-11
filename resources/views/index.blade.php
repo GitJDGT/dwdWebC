@@ -50,6 +50,35 @@
 
         --}}
 
+        {{-- Barra de Navegacion: INICIO --}}
+        <nav class="bg-slate-600">
+
+            <div class="mx-auto px-4">
+
+                <div class="flex justify-between">
+
+                    <div class="flex space-x-7 items-center justify-start py-2">
+
+                        <h1 class="text-2xl font-bold">DWD</h1>
+    
+                        <a href="{{ route('index') }}" class="text-white mx-2">Home</a>
+
+                    </div>
+
+                    <div class="flex items-center ">
+                        
+                        <button name="logoutBtn" id="logoutBtn" class="bg-red-500 hover:bg-red-900 border border-red-400 rounded p-1">Logout</button>
+                        
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </nav>
+        {{-- Barra de Navegacion: FINAL --}}
+
         {{-- Contenido principal de la vista: INICIO --}}
         <div class="grid grid-rows-2 w-auto">
 
@@ -242,13 +271,15 @@
                 // Funcion de REGISTRO de citas:
                 function registrarCita(infoCita)
                 {
+                    var user_id = sessionStorage.getItem('user_id');
+
                     // Datos de la cita a enviar al servidor:
 
                     var registerTitle = document.getElementById('registerTitle').value;
     
                     var citaData = {
     
-                        "user_id": 1,
+                        "user_id": user_id,
                         "title": registerTitle,
                         "scheduled_for": infoCita
     
@@ -257,7 +288,7 @@
     
                     // Token de sesion:
     
-                    var token = '1|NgHbeKzdsaYGtihHtw2CkseUYfggKx0DH0HyTzoG69c0c607';
+                    var token = sessionStorage.getItem('token');
     
     
                     // Configuracion de la peticion:
@@ -298,7 +329,7 @@
                 {
                     // Token de sesion:
     
-                    var token = '1|NgHbeKzdsaYGtihHtw2CkseUYfggKx0DH0HyTzoG69c0c607';
+                    var token = sessionStorage.getItem('token');
     
     
                     // Configuracion de la peticion:
@@ -347,11 +378,13 @@
                 function editarCita(id, title, dateTime)
                 {
 
+                    var user_id = sessionStorage.getItem('user_id');
+
                     // Nuevos datos de la cita a enviar al servidor:
                     
                     var editCitaData = {
 
-                        "user_id": 1,
+                        "user_id": user_id,
                         "title": title,
                         "scheduled_for": dateTime
 
@@ -359,7 +392,7 @@
 
                     // Token de sesion:
 
-                    var token = '1|NgHbeKzdsaYGtihHtw2CkseUYfggKx0DH0HyTzoG69c0c607';
+                    var token = sessionStorage.getItem('token');
 
 
                     // Configuracion de la peticion:
@@ -397,7 +430,7 @@
 
                     try {
 
-                        var token = '1|NgHbeKzdsaYGtihHtw2CkseUYfggKx0DH0HyTzoG69c0c607';
+                        var token = sessionStorage.getItem('token');
 
                         var response = await fetch('http://127.0.0.1:8000/api/v1/appointments/' + id, {
 
@@ -524,7 +557,44 @@
 
                 })
 
+                // Evento CLICK en boton de LOGOUT:
+                document.getElementById('logoutBtn').addEventListener('click', event => {
 
+                    var token = sessionStorage.getItem('token');
+
+                    var requestOptions = {
+
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token,
+                            'Accept': 'application/json'
+                        }
+
+                    };
+
+                    fetch('http://127.0.0.1:8000/api/logout', requestOptions)
+                        .then(response => {
+
+                            if(response.ok)
+                            {
+
+                                sessionStorage.removeItem('token');
+                                window.location.href = '{{ route('login') }}';
+                            }
+                            else
+                            {
+                                console.log('Something went wrong loging out: ', response.status);
+                            }
+
+                        })
+                        .catch(error => {
+
+                            console.error('Error in the AJAX request: ', error);
+
+                        });
+                    
+                });
 
             });
             
