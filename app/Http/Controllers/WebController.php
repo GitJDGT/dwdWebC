@@ -17,7 +17,13 @@ class WebController extends Controller
 
         $page = request() -> page;
 
-        $response = Http::get("http://127.0.0.1:8000/api/v1/appointments?page={$page}"); ///api/v1/appointments
+        $response = Http::get("http://127.0.0.1:8000/api/v1/appointments?page={$page}"); // /api/v1/appointments
+
+        // Comprobamos la respuesta de autenticacion del servidor (NO FUNCIONA).
+        // if($response -> status() === 401)
+        // {
+        //     return redirect() -> route('login');
+        // }
 
         $data = $response -> collect();
 
@@ -28,8 +34,6 @@ class WebController extends Controller
         // Creamos una instancia de nuestro paginador
 
         $paginator = new LengthAwarePaginator($items, $total, $PerPage);
-
-        //dd($pag);
 
         return view('index', ['appointments' => $paginator]);
     }

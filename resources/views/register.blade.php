@@ -7,7 +7,7 @@
 
         @vite('resources/css/app.css')
 
-        <title>Log In</title>
+        <title>Register</title>
     </head>
 
     <body class="bg-neutral-900 text-white">
@@ -18,14 +18,14 @@
                 {{-- Espacio vacio a la izquierda --}}
             </div>
 
-            {{-- Nuestro componente de Log In y Registro, contiene todos los campos del formulario y botones interactivos --}}
+            {{-- Nuestro componente de Registro, contiene todos los campos del formulario y botones interactivos --}}
             <div class="max-w-8xl w-full mx-auto items-center flex justify-center h-screen">
                 
-                <div class="bg-slate-800 border border-slate-700 rounded-lg p-6 space-y-5 w-3/4">
+                <div class="bg-slate-800 rounded-lg p-6 space-y-5 w-3/4">
 
                     <div class="border-b-2 border-slate-700 mb-8">
 
-                        <h1 class="text-2xl font-bold mb-4 text-center">Log In</h1>
+                        <h1 class="text-2xl font-bold mb-4 text-center">Create your account</h1>
 
                     </div>
 
@@ -37,26 +37,22 @@
                         <label for="password" class="text-lg text-white mb-1 font-semibold">Password</label>
                         <input type="password" name="password" id="password" class="p-2 rounded bg-slate-900 border border-slate-700 mb-4">
 
-                        <label for="device" class="text-lg text-white mb-1 font-semibold">Device</label>
-                        <select name="device" id="device" class="p-2 rounded bg-slate-900 border border-slate-700 mb-20">
+                        <label for="username" class="text-lg text-white mb-1 font-semibold">Name</label>
+                        <input type="text" name="username" id="username" class="p-2 rounded bg-slate-900 border border-slate-700 mb-4">
+                        
+                        <br>
 
-                            <option value="pc">PC</option>
+                        <input type="button" value="Register" id="registerBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer duration-150 mb-4">
 
-                            <option value="mobile">Mobile</option>
-
-                        </select>
-
-                        <input type="button" value="Log In" id="loginBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer duration-150 mb-4">
-
-                        <input type="button" value="Continue as Guest" id="guestBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer duration-150 mb-2">
+                        
 
                     </form>
 
                     <div class="border-t-2 border-slate-700 mt-8 flex justify-center">
 
-                        <p class="text-xl mt-4">Don't have an account?</p>
+                        <p class="text-xl mt-4">Already have an account?</p>
 
-                        <a href="{{ route('register') }}" class="text-xl mt-4 ml-2 text-blue-500 hover:text-yellow-500 underline underline-offset-1">Register</a>
+                        <a href="{{ route('login') }}" class="text-xl mt-4 ml-2 text-blue-500 hover:text-yellow-500 underline underline-offset-1">Log In</a>
 
                     </div>
 
@@ -73,25 +69,25 @@
         {{-- En estas seccion crearemos la solicitud que se envia a la API --}}
         <script>
 
-            document.getElementById('loginBtn').addEventListener('click', function(){
+            document.getElementById('registerBtn').addEventListener('click', function(){
 
                 var email = document.getElementById('email').value;
                 var password = document.getElementById('password').value;
-                var device = document.getElementById('device').value;
+                var username = document.getElementById('username').value;
 
                 // Validamos los campos
-                if (!email || !password || !device)
+                if (!email || !password || !username)
                 {
                     alert('All fields are required');
                     return;
                 }
 
                 // Datos a enviar en la peticion
-                var loginData = {
+                var registerData = {
 
+                    name: username,
                     email: email,
-                    password: password,
-                    name: device
+                    password: password
 
                 }
 
@@ -104,12 +100,12 @@
                         'Accept': 'application/json'
                     },
 
-                    body: JSON.stringify(loginData)
+                    body: JSON.stringify(registerData)
 
                 };
 
                 // Solicitud AJAX a la API
-                fetch('http://127.0.0.1:8000/api/login', requestOptions)
+                fetch('http://127.0.0.1:8000/api/register', requestOptions)
                     .then(response => {
 
                         if(!response.ok)
@@ -121,22 +117,16 @@
                     })
                     .then(data => {
 
-                        if(data.token)
+                        if(data)
                         {
-                            alert('Login successful');
-
-                            // Guardamos el token en el navegador
-                            sessionStorage.setItem('token', data.token);
-
-                            // Guardamos el ID de usuario en el navegador
-                            sessionStorage.setItem('user_id', data.user_id);
+                            alert('Register successful');
 
                             // Redireccionamos a la pagina principal
-                            window.location.href = '{{ route('index') }}';
+                            window.location.href = '{{ route('login') }}';
                         }
                         else
                         {
-                            alert('Login failed ' + data.message);
+                            alert('Register failed ' + data.message);
                         }
 
                     })

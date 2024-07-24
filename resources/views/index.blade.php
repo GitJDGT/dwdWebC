@@ -51,7 +51,7 @@
         --}}
 
         {{-- Barra de Navegacion: INICIO --}}
-        <nav class="bg-slate-600">
+        <nav class="bg-slate-800 p-1 items-center">
 
             <div class="mx-auto px-4">
 
@@ -61,13 +61,13 @@
 
                         <h1 class="text-2xl font-bold">DWD</h1>
     
-                        <a href="{{ route('index') }}" class="text-white mx-2">Home</a>
+                        <a href="{{ route('index') }}" class="font-bold text-2xl hover:text-yellow-500 duration-300">Home</a>
 
                     </div>
 
-                    <div class="flex items-center ">
+                    <div class="flex items-center">
                         
-                        <button name="logoutBtn" id="logoutBtn" class="bg-red-500 hover:bg-red-900 border border-red-400 rounded p-1">Logout</button>
+                        <button name="logoutBtn" id="logoutBtn" class="text-red-900 font-bold text-2xl hover:text-red-500 duration-300">Logout</button>
                         
                     </div>
 
@@ -90,13 +90,13 @@
 
                 </div>
 
-                <div class="flex items-center">
+                <div class="flex items-center bg-slate-800 border border-slate-700 rounded p-2">
 
                     <div class="flex flex-col">
 
                         <label for="TimePicker" class="text-white text-center">Select the time:</label>
     
-                        <input type="time" name="TimePicker" id="TimePicker" class="text-white text-center bg-slate-700 border border-slate-500 hover:bg-slate-800 hover:border-white rounded p-1 mx-1 items-center justify-center">
+                        <input type="time" name="TimePicker" id="TimePicker" class="text-white text-center bg-slate-900 border border-slate-700 hover:bg-slate-800 hover:border-white rounded p-1 mx-1 items-center justify-center">
 
                     </div>
 
@@ -104,13 +104,13 @@
 
                         <label for="registerTitle" class="text-white text-center">Type a title:</label>
 
-                        <input type="text" name="registerTitle" id="registerTitle" class="text-white text-left bg-slate-700 border border-slate-500 hover:bg-slate-800 hover:border-white rounded p-1 mx-1 items-center justify-center">
+                        <input type="text" name="registerTitle" id="registerTitle" maxlength="20" class="text-white text-left bg-slate-900 border border-slate-700 hover:bg-slate-800 hover:border-white rounded p-1 mx-1 items-center justify-center">
 
                     </div>
                     
                     <div class="mt-6 items-center justify-center">
     
-                        <input type="button" class="bg-gray-400 rounded border border-gray-400 text-white font-semibold hover:cursor-pointer hover:bg-gray-500 hover:border-white duration-150 text-lg p-1 mx-1" id="sendBtn" value="Send">
+                        <input type="button" class="bg-green-600 rounded border border-green-600 font-semibold hover:cursor-pointer hover:bg-green-700 hover:border-green-700 duration-300 text-lg p-1 mx-1" id="sendBtn" value="Send">
 
                     </div>
                     
@@ -128,9 +128,9 @@
         
                             <?php //dd($appointments);?>
                 
-                            <div class="flex bg-slate-700 border rounded border-slate-700 hover:bg-slate-800 hover:border-yellow-200 duration-150 p-2 xl:space-x-10">
+                            <div class="flex bg-slate-800 border rounded border-slate-700 hover:border-yellow-500 duration-300 p-2 xl:space-x-10">
                 
-                                <div class="bg-gray-600 rounded text-sm text-wrap w-2/3 pt-1 text-center">
+                                <div class="bg-gray-700 rounded text-sm text-wrap w-2/3 pt-1 text-center">
 
                                     <h2 class="text-md xl:text-lg font-semibold">{{ $appointment['title'] }}</h2>
                                     
@@ -142,8 +142,8 @@
 
                                 <div class="flex flex-col xl:flex-row w-1/3 items-center justify-center xl:justify-normal space-y-2 xl:space-y-0 xl:space-x-5">
 
-                                    <input type="button" class="bg-blue-600 rounded border border-blue-600 hover:cursor-pointer hover:bg-blue-700 hover:border-white duration-150 text-lg font-semibold p-1 editBtn" data-id="{{ $appointment['id'] }}" value="Edit">
-                                    <input type="button" class="bg-red-600 rounded border border-red-600 hover:cursor-pointer hover:bg-red-700 hover:border-white duration-150 text-lg font-semibold p-1 deleteBtn" data-id="{{ $appointment['id'] }}" value="Delete">
+                                    <input type="button" class="bg-blue-500 border border-blue-500 rounded hover:cursor-pointer hover:bg-blue-700 hover:border-blue-700 duration-300 text-lg font-semibold p-1 editBtn" data-id="{{ $appointment['id'] }}" value="Edit">
+                                    <input type="button" class="bg-red-500 border border-red-500 rounded hover:cursor-pointer hover:bg-red-700 hover:border-red-700 duration-300 text-lg font-semibold p-1 deleteBtn" data-id="{{ $appointment['id'] }}" value="Delete">
                                     
                                 </div>
                 
@@ -167,7 +167,7 @@
         {{-- Ventana modal: INICIO --}}
         <div id="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
 
-            <div class="modal-content bg-slate-700 p-6 rounded-lg max-w-md">
+            <div class="modal-content bg-slate-800 p-6 rounded-lg max-w-md">
 
                 <span class="close absolute top-0 right-0 px-3 py-2 cursor-pointer font-bold text-white bg-red-400 rounded-xl">X</span>
 
@@ -176,12 +176,12 @@
                 <form id="editForm">
 
                     <label for="modal-title" class="block mb-2">Title:</label>
-                    <input type="text" id="modal-title" name="modal-title" required class="w-full bg-slate-800 border border-slate-900 rounded px-3 py-2 mb-4">
+                    <input type="text" id="modal-title" name="modal-title" maxlength="20" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 mb-4">
 
                     <label for="modal-timePicker" class="block mb-2">Scheduled for:</label>
-                    <input type="datetime-local" id="modal-timePicker" name="modal-timePicker" required class="w-full bg-slate-800 border border-slate-900 rounded px-3 py-2 mb-4">
+                    <input type="datetime-local" id="modal-timePicker" name="modal-timePicker" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 mb-4">
 
-                    <input type="button" id="saveBtn" name="saveBtn" value="Save changes" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer duration-150">
+                    <input type="button" id="saveBtn" name="saveBtn" value="Save changes" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer duration-300">
 
                 </form>
 
@@ -195,6 +195,15 @@
         {{-- Scripts de JavaScript para interacciones: INICIO --}}
         <script>
 
+            // Validacion de sesion activa:
+            if(sessionStorage.getItem('token') === null)
+            {
+                window.location.href = '{{ route('login') }}';
+            }
+
+
+            
+            // Esta funcion ejecutara cuando cargue la pagina y contiene todas las demas funciones que requerimos para la interfaz:  
             document.addEventListener('DOMContentLoaded', function() {
 
                 /*  SOBRE EL FLATPICKR
@@ -598,7 +607,6 @@
 
             });
             
-
         </script>
         {{-- Scripts de JavaScript para interacciones: FINAL --}}
 
