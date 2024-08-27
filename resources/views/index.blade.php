@@ -167,7 +167,7 @@
         {{-- Ventana modal: INICIO --}}
         <div id="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
 
-            <div class="modal-content bg-slate-800 p-6 rounded-lg max-w-md">
+            <div class="modal-content bg-slate-800 p-6 rounded max-w-md border border-slate-700">
 
                 <span class="close absolute top-0 right-0 px-3 py-2 cursor-pointer font-bold text-white bg-red-400 rounded-xl">X</span>
 
@@ -192,6 +192,22 @@
 
 
 
+        {{-- Ventana de Dialogo: INICIO --}}
+        <div id="dialog" class="dialog hidden fixed inset-0 items-center z-50">
+
+            <div class="dialog-content bg-slate-800 p-6 rounded max-w-md mx-auto mt-20 border border-slate-700 flex flex-col items-center">
+
+                <h2 class="message mb-4"></h2>
+
+                <button class="closeDialog bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded duration-300">Close</button>
+
+            </div>
+
+        </div>
+        {{-- Ventana de Dialogo: FINAL --}}
+
+
+
         {{-- Scripts de JavaScript para interacciones: INICIO --}}
         <script>
 
@@ -201,6 +217,9 @@
                 window.location.href = '{{ route('login') }}';
             }
 
+            // Obtenemos nuestra ventana de dialogo para mostrar mensajes:
+            const dialog = document.getElementById('dialog');
+            const messageElement = document.querySelector('.message');
 
             
             // Esta funcion ejecutara cuando cargue la pagina y contiene todas las demas funciones que requerimos para la interfaz:  
@@ -320,15 +339,17 @@
 
                     fetch('http://127.0.0.1:8000/api/v1/appointments', requestOptions)
                         .then(response => response.json())
-                        .then(result => console.log(result))
+                        .then(result => {
+
+                            messageElement.textContent = result.message;
+                            showDialog();
+
+                        })
                         .catch(error => {
     
-                            console.error('Error al enviar la solicitud: ', error);
-    
+                            console.error('An error occurred sending the request: ', error);
+
                         })
-
-                    window.location.reload();
-
                 }
 
 
@@ -360,23 +381,20 @@
                     fetch('http://127.0.0.1:8000/api/v1/appointments/' + id, requestOptions)
                         .then(response => {
 
-                            if(response.ok) 
+                            if(response.ok)
                             {
-
-                                location.reload();
-
-                                console.log('Cita Eliminada');
-
-                            } 
-                            else 
-                            {
-                                console.log('Error al eliminar la cita: ', response.status)
+                                // Hacemos que el texto resultado de ejecutar la peticion se muestre en la ventana de dialogo:
+                                messageElement.textContent = 'Appointment deleted successfully';
+                                showDialog();
                             }
-
+                            else
+                            {
+                                console.log('Something went wrong deleting the appointment: ', response.status);
+                            }
                         })
                         .catch(error => {
 
-                            console.error('Error al enviar la solicitud: ', error)
+                            console.error('An error occurred sending the request: ', error)
 
                         })
                 }
@@ -423,10 +441,18 @@
 
                     fetch('http://127.0.0.1:8000/api/v1/appointments/' + id, requestOptions)
                         .then(response => response.json())
-                        .then(result => console.log(result))
+                        .then(result => {
+
+                            // Hacemos que el texto resultado de ejecutar la peticion se muestre en la ventana de dialogo:
+                            messageElement.textContent = result.message;
+                            showDialog();
+                            
+                        })
                         .catch(error => {
 
-                            console.error('Error al enviar la solicitud: ', error);
+                            console.error('An error occurred sending the request: ', error);
+                            alert('An error occurred: ' + error);
+
                         })
                 }
 
@@ -530,6 +556,37 @@
                         closeModal();
                     }
 
+                });
+
+
+
+                // Obtenemos el cuadro de dialogo y realizamos las funciones que lo muestran y cierran:
+                var dialog = document.getElementById('dialog');
+                var closeDialogBtn = document.querySelector('.closeDialog');
+
+                function showDialog()
+                {
+                    dialog.classList.remove('hidden');
+                }
+
+                function closeDialog()
+                {
+                    dialog.classList.add('hidden');
+                    window.location.reload();
+                }
+
+                closeDialogBtn.addEventListener('click', function(){
+
+                    closeDialog();
+
+                });
+
+                window.addEventListener('click', function(event){
+
+                    if(event.target === dialog)
+                    {
+                        closeDialog();
+                    }
                 });
 
 
