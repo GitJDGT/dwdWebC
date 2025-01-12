@@ -17,24 +17,30 @@ class WebController extends Controller
 
         $page = request() -> page;
 
-        // Necesitamos obtener el token de la sesion para acceder a la API, de lo contrario la peticion Get no podra traer la informacion y causara que
-        // $data quede vacia.
+        // Nos aseguramos de validar el token de la sesion para acceder a la API, de lo contrario la retornamos la vista de Login.
 
-        // $token = $_POST['token']; // ESTO NO SIRVE
-        // echo "El token es: $token";
+        $token = session('api_token');
 
-        $response = Http::get("http://127.0.0.1:8000/api/v1/appointments?page={$page}"); // /api/v1/appointments
-        
-        // Comprobamos la respuesta de autenticacion del servidor (NO FUNCIONA).
-        // if($response -> status() === 401)
-        // {
-        //     return redirect() -> route('login');
-        // }
+        if(!$token)
+        {
+            return redirect() -> route('login') -> withErrors(['message' => 'Token not found.']);
+        }
+
+        // Obtenemos informacion de la API, en caso de que la consulta de esta informacion falle, tambien retornamos la vista de Login.
+
+        $response = Http::withToken($token) -> get("http://127.0.0.1:8000/api/v1/appointments?page={$page}"); // /api/v1/appointments
+
+        if($response -> failed())
+        {
+            return redirect() -> route('login') -> withErrors(['message' => 'Something went wrong retrieving the data.']);
+        }
 
         $data = $response -> collect();
         
-        $items = $data['data']; // Se obtienen los recursos de la pagina actual.
-        $total = $data['meta']['total']; // Obtenemos el total de recursos que comprende nuestra coleccion.
+        //$items = array_filter( $data['data'], function($items) { return $items['author']['user_id'] == session('api_userID'); } ) ; // Se obtienen los recursos de la pagina actual.
+        //dd($data);
+        $items = $data['data'];
+        $total = $data['meta']['total']; // Obtenemos el total de recursos que comprende nuestra coleccion. HAY QUE HACER QUE ESTO SE ACTUALICE SEGUN EL USUARIO Y NO EN TOTAL
         $PerPage = $data['meta']['per_page']; // Obtenemos los recursos que se muestran por pagina.
 
         // Creamos una instancia de nuestro paginador

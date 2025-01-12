@@ -24,3 +24,6 @@ Route::get('/register', [\App\Http\Controllers\WebController::class, 'register']
 
 // Ruta de cierre de sesion
 Route::get('/logout', [\App\Http\Controllers\WebController::class, 'logout']) -> middleware('web') -> name('logout');
+
+// Ruta para pasar el token de sesion al servidor
+Route::post('/store-token', [\App\Http\Controllers\TokenController::class, 'storeToken']) -> middleware('web') -> name('store-token');

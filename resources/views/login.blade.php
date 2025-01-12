@@ -131,6 +131,32 @@
                             // Guardamos el ID de usuario en el navegador
                             sessionStorage.setItem('user_id', data.user_id);
 
+                            // Obtenemos el token de sesion y el ID de usuario para enviarlo al BACKEND del Cliente WEB en una peticion AJAX:
+                            var token = sessionStorage.getItem('token');
+                            var user_id = sessionStorage.getItem('user_id');
+                            const token_request_Options = {
+
+                                method: 'POST',
+                                headers: {
+
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+
+                                },
+
+                                body: JSON.stringify({ token: token, user_id: user_id })
+                            };
+
+                            if(token)
+                            {
+                                fetch('/store-token', token_request_Options)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log('Token and User ID stored in session: ', data);
+                                    })
+                                    .catch(error => console.error('Error: ', error));
+                            }
+
                             // Redireccionamos a la pagina principal
                             window.location.href = '{{ route('index') }}';
                         }

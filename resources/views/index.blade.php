@@ -51,7 +51,7 @@
         --}}
 
         {{-- Barra de Navegacion: INICIO --}}
-        <nav class="bg-slate-800 p-1 items-center">
+        <nav class="bg-slate-800 p-1 items-center border border-slate-700 rounded">
 
             <div class="mx-auto px-4">
 
@@ -126,7 +126,8 @@
         
                         @foreach ($appointments as $appointment)
         
-                            <?php //dd($appointments);?>
+                            <?php //dd($appointments); // para ver todos los datos?>
+                            <?php $userID = session('api_userID'); ?>
                 
                             <div class="flex bg-slate-800 border rounded border-slate-700 hover:border-yellow-500 duration-300 p-2 xl:space-x-10">
                 
@@ -142,8 +143,18 @@
 
                                 <div class="flex flex-col xl:flex-row w-1/3 items-center justify-center xl:justify-normal space-y-2 xl:space-y-0 xl:space-x-5">
 
-                                    <input type="button" class="bg-blue-500 border border-blue-500 rounded hover:cursor-pointer hover:bg-blue-700 hover:border-blue-700 duration-300 text-lg font-semibold p-1 editBtn" data-id="{{ $appointment['id'] }}" value="Edit">
-                                    <input type="button" class="bg-red-500 border border-red-500 rounded hover:cursor-pointer hover:bg-red-700 hover:border-red-700 duration-300 text-lg font-semibold p-1 deleteBtn" data-id="{{ $appointment['id'] }}" value="Delete">
+                                    <?php if($appointment['author']['user_id'] == $userID) {?>
+
+                                        <input type="button" class="bg-blue-500 border border-blue-500 rounded hover:cursor-pointer hover:bg-blue-700 hover:border-blue-700 duration-300 text-lg font-semibold p-1 editBtn" data-id="{{ $appointment['id'] }}" value="Edit">
+                                        <input type="button" class="bg-red-500 border border-red-500 rounded hover:cursor-pointer hover:bg-red-700 hover:border-red-700 duration-300 text-lg font-semibold p-1 deleteBtn" data-id="{{ $appointment['id'] }}" value="Delete">
+
+                                    <?php } else { ?>
+
+                                        <input type="button" class="bg-gray-500 border border-gray-500 rounded hover:cursor-not-allowed hover:bg-gray-700 hover:border-gray-700 duration-300 text-lg font-semibold p-1 LockedEditBtn" value="Edit">
+                                        <input type="button" class="bg-gray-500 border border-gray-500 rounded hover:cursor-not-allowed hover:bg-gray-700 hover:border-gray-700 duration-300 text-lg font-semibold p-1 LockedDeleteBtn" value="Delete">
+
+                                    <?php }?>
+
                                     
                                 </div>
                 
@@ -661,6 +672,7 @@
                         });
                     
                 });
+
 
             });
             
