@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 // Ruta principal, Index o Home donde se muestra la lista de citas, calendario y demas.
 Route::get('/', [\App\Http\Controllers\WebController::class, 'indexApi']) -> middleware('web') -> name('index');
 
+// Ruta secundaria, Es una muestra de la lista de citas en una sesion de invitado sin permisos de edicion, creacion o eliminacion.
+Route::get('/guest', [\App\Http\Controllers\WebController::class, 'guestIndex']) -> middleware('web') -> name('guestIndex');
+
 // Ruta de inicio de sesion
 Route::get('/login', [\App\Http\Controllers\WebController::class, 'login']) -> middleware('web') -> name('login');
 

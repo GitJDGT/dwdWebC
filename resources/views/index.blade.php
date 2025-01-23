@@ -267,14 +267,7 @@
 
                     eventColor: 'green',
 
-                    events: [
-
-                        // {
-                        //     title: 'All Day Event',
-                        //     start: '2024-06-01'
-                        // }
-
-                    ],
+                    events: [],
 
                     selectable: true,
                     select: function(dateInfo) 

@@ -174,6 +174,11 @@
                     });
             })
 
+            document.getElementById('guestBtn').addEventListener('click', function(){
+
+                window.location.href = '{{ route('guestIndex') }}';
+            })
+
         </script>
         
     </body>

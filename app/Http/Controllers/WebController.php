@@ -37,10 +37,8 @@ class WebController extends Controller
 
         $data = $response -> collect();
         
-        //$items = array_filter( $data['data'], function($items) { return $items['author']['user_id'] == session('api_userID'); } ) ; // Se obtienen los recursos de la pagina actual.
-        //dd($data);
-        $items = $data['data'];
-        $total = $data['meta']['total']; // Obtenemos el total de recursos que comprende nuestra coleccion. HAY QUE HACER QUE ESTO SE ACTUALICE SEGUN EL USUARIO Y NO EN TOTAL
+        $items = $data['data']; // Obtenemos la informacion de cada Appointment registrado por el usuario.
+        $total = $data['meta']['total']; // Obtenemos el total de recursos que comprende nuestra coleccion.
         $PerPage = $data['meta']['per_page']; // Obtenemos los recursos que se muestran por pagina.
 
         // Creamos una instancia de nuestro paginador
@@ -48,6 +46,31 @@ class WebController extends Controller
         $paginator = new LengthAwarePaginator($items, $total, $PerPage);
 
         return view('index', ['appointments' => $paginator]);
+    }
+
+    public function guestIndex()
+    {
+        // Obtenemos la informacion usando la libreria HTTP de Laravel y luego
+        // almacenamos la respuesta de la API en una variable de nombre DATA y accedemos al atributo DATA, META TOTAL y META PER_PAGE de la respuesta de la API
+        // finalmente retornamos la vista con la funcion VIEW y pasamos la informacion codificada en JSON bajo el nombre de APPOINTMENT.
+
+        $page = request() -> page;
+
+        // Obtenemos informacion de la API.
+
+        $response = Http::get("http://127.0.0.1:8000/api/v1/guest?page={$page}"); // /api/v1/guest
+
+        $data = $response -> collect();
+        
+        $items = $data['data']; // Obtenemos la informacion de cada Appointment registrado en la base de datos.
+        $total = $data['meta']['total']; // Obtenemos el total de recursos que comprende nuestra coleccion. HAY QUE HACER QUE ESTO SE ACTUALICE SEGUN EL USUARIO Y NO EN TOTAL
+        $PerPage = $data['meta']['per_page']; // Obtenemos los recursos que se muestran por pagina.
+
+        // Creamos una instancia de nuestro paginador
+
+        $guestPaginator = new LengthAwarePaginator($items, $total, $PerPage);
+        
+        return view('guest', ['guestAppointments' => $guestPaginator]);
     }
 
     public function login()
