@@ -19,6 +19,9 @@ Route::get('/', [\App\Http\Controllers\WebController::class, 'indexApi']) -> mid
 // Ruta secundaria, Es una muestra de la lista de citas en una sesion de invitado sin permisos de edicion, creacion o eliminacion.
 Route::get('/guest', [\App\Http\Controllers\WebController::class, 'guestIndex']) -> middleware('web') -> name('guestIndex');
 
+// Rutan de tutorial
+Route::get('/tutorial', [\App\Http\Controllers\WebController::class, 'tutorial']) -> middleware('web') -> name('tutorial');
+
 // Ruta de inicio de sesion
 Route::get('/login', [\App\Http\Controllers\WebController::class, 'login']) -> middleware('web') -> name('login');
 

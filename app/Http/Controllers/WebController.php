@@ -73,6 +73,11 @@ class WebController extends Controller
         return view('guest', ['guestAppointments' => $guestPaginator]);
     }
 
+    public function tutorial()
+    {
+        return view('tutorial');
+    }
+
     public function login()
     {
         return view('login');

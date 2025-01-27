@@ -51,17 +51,19 @@
         --}}
 
         {{-- Barra de Navegacion: INICIO --}}
-        <nav class="bg-blue-800 p-1 items-center border border-slate-700 rounded">
+        <nav class="bg-slate-800 p-1 items-center border border-slate-700 rounded">
 
             <div class="mx-auto px-4">
 
                 <div class="flex justify-between">
 
-                    <div class="flex space-x-7 items-center justify-start py-2">
+                    <div class="flex space-x-7 items-center justify-between py-2">
 
                         <h1 class="text-2xl font-bold">DWD Guest</h1>
     
-                        <a href="{{ route('index') }}" class="font-bold text-2xl hover:text-yellow-500 duration-300">Home</a>
+                        <a href="{{ route('index') }}" class="font-bold text-2xl text-slate-300 hover:text-green-500 duration-300">Log in</a>
+
+                        <a href="{{ route('tutorial') }}" class="font-bold text-2xl text-slate-300 hover:text-yellow-500 duration-300">Tutorial</a>
 
                     </div>
 
@@ -279,7 +281,7 @@
 
                 document.getElementById('sendBtn').addEventListener('click', function() {
 
-                    messageElement.textContent = "Please click 'Home' and Log in. You must be logged in to make an appointment.";
+                    messageElement.textContent = "Please click 'Log in' and start a new session. You must be authenticated to make an appointment.";
                     console.log("Please Log in");
 
                     showDialog();

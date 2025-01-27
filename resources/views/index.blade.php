@@ -61,13 +61,14 @@
 
                         <h1 class="text-2xl font-bold">DWD</h1>
     
-                        <a href="{{ route('index') }}" class="font-bold text-2xl hover:text-yellow-500 duration-300">Home</a>
+                        <a href="{{ route('index') }}" class="font-bold text-2xl text-slate-300 hover:text-green-500 duration-300">Home</a>
+                        <a href="{{ route('tutorial') }}" class="font-bold text-2xl text-slate-300 hover:text-yellow-500 duration-300">Tutorial</a>
 
                     </div>
 
                     <div class="flex items-center">
                         
-                        <button name="logoutBtn" id="logoutBtn" class="text-red-900 font-bold text-2xl hover:text-red-500 duration-300">Logout</button>
+                        <button name="logoutBtn" id="logoutBtn" class="text-red-900 font-bold text-2xl hover:text-red-500 duration-300">Log out</button>
                         
                     </div>
 
