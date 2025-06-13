@@ -8,10 +8,28 @@ use Illuminate\Support\Facades\Route;
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| Aqui se encuentran todas las rutas Web de nuestro cliente, cada una con
+| sus respectivos nombres.
 |
 */
 
-Route::get('/', [\App\Http\Controllers\WebController::class, 'indexApi']) -> middleware('web');
+// Ruta principal, Index o Home donde se muestra la lista de citas, calendario y demas.
+Route::get('/', [\App\Http\Controllers\WebController::class, 'indexApi']) -> middleware('web') -> name('index');
+
+// Ruta secundaria, Es una muestra de la lista de citas en una sesion de invitado sin permisos de edicion, creacion o eliminacion.
+Route::get('/guest', [\App\Http\Controllers\WebController::class, 'guestIndex']) -> middleware('web') -> name('guestIndex');
+
+// Rutan de tutorial
+Route::get('/tutorial', [\App\Http\Controllers\WebController::class, 'tutorial']) -> middleware('web') -> name('tutorial');
+
+// Ruta de inicio de sesion
+Route::get('/login', [\App\Http\Controllers\WebController::class, 'login']) -> middleware('web') -> name('login');
+
+// Ruta de registro
+Route::get('/register', [\App\Http\Controllers\WebController::class, 'register']) -> middleware('web') -> name('register');
+
+// Ruta de cierre de sesion
+Route::get('/logout', [\App\Http\Controllers\WebController::class, 'logout']) -> middleware('web') -> name('logout');
+
+// Ruta para pasar el token de sesion al servidor
+Route::post('/store-token', [\App\Http\Controllers\TokenController::class, 'storeToken']) -> middleware('web') -> name('store-token');

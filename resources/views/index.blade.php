@@ -50,6 +50,36 @@
 
         --}}
 
+        {{-- Barra de Navegacion: INICIO --}}
+        <nav class="bg-slate-800 p-1 items-center border border-slate-700 rounded">
+
+            <div class="mx-auto px-4">
+
+                <div class="flex justify-between">
+
+                    <div class="flex space-x-7 items-center justify-start py-2">
+
+                        <h1 class="text-2xl font-bold">DWD</h1>
+    
+                        <a href="{{ route('index') }}" class="font-bold text-2xl text-slate-300 hover:text-green-500 duration-300">Home</a>
+                        <a href="{{ route('tutorial') }}" class="font-bold text-2xl text-slate-300 hover:text-yellow-500 duration-300">Tutorial</a>
+
+                    </div>
+
+                    <div class="flex items-center">
+                        
+                        <button name="logoutBtn" id="logoutBtn" class="text-red-900 font-bold text-2xl hover:text-red-500 duration-300">Log out</button>
+                        
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </nav>
+        {{-- Barra de Navegacion: FINAL --}}
+
         {{-- Contenido principal de la vista: INICIO --}}
         <div class="grid grid-rows-2 w-auto">
 
@@ -61,13 +91,13 @@
 
                 </div>
 
-                <div class="flex items-center">
+                <div class="flex items-center bg-slate-800 border border-slate-700 rounded p-2">
 
                     <div class="flex flex-col">
 
                         <label for="TimePicker" class="text-white text-center">Select the time:</label>
     
-                        <input type="time" name="TimePicker" id="TimePicker" class="text-white text-center bg-slate-700 border border-slate-500 hover:bg-slate-800 hover:border-white rounded p-1 mx-1 items-center justify-center">
+                        <input type="time" name="TimePicker" id="TimePicker" class="text-white text-center bg-slate-900 border border-slate-700 hover:bg-slate-800 hover:border-white rounded p-1 mx-1 items-center justify-center">
 
                     </div>
 
@@ -75,13 +105,13 @@
 
                         <label for="registerTitle" class="text-white text-center">Type a title:</label>
 
-                        <input type="text" name="registerTitle" id="registerTitle" class="text-white text-left bg-slate-700 border border-slate-500 hover:bg-slate-800 hover:border-white rounded p-1 mx-1 items-center justify-center">
+                        <input type="text" name="registerTitle" id="registerTitle" maxlength="20" class="text-white text-left bg-slate-900 border border-slate-700 hover:bg-slate-800 hover:border-white rounded p-1 mx-1 items-center justify-center">
 
                     </div>
                     
                     <div class="mt-6 items-center justify-center">
     
-                        <input type="button" class="bg-gray-400 rounded border border-gray-400 text-white font-semibold hover:cursor-pointer hover:bg-gray-500 hover:border-white duration-150 text-lg p-1 mx-1" id="sendBtn" value="Send">
+                        <input type="button" class="bg-green-600 rounded border border-green-600 font-semibold hover:cursor-pointer hover:bg-green-700 hover:border-green-700 duration-300 text-lg p-1 mx-1" id="sendBtn" value="Send">
 
                     </div>
                     
@@ -97,11 +127,12 @@
         
                         @foreach ($appointments as $appointment)
         
-                            <?php //dd($appointments);?>
+                            <?php //dd($appointments); // para ver todos los datos?>
+                            <?php $userID = session('api_userID'); ?>
                 
-                            <div class="flex bg-slate-700 border rounded border-slate-700 hover:bg-slate-800 hover:border-yellow-200 duration-150 p-2 xl:space-x-10">
+                            <div class="flex bg-slate-800 border rounded border-slate-700 hover:border-yellow-500 duration-300 p-2 xl:space-x-10">
                 
-                                <div class="bg-gray-600 rounded text-sm text-wrap w-2/3 pt-1 text-center">
+                                <div class="bg-gray-700 rounded text-sm text-wrap w-2/3 pt-1 text-center">
 
                                     <h2 class="text-md xl:text-lg font-semibold">{{ $appointment['title'] }}</h2>
                                     
@@ -113,8 +144,18 @@
 
                                 <div class="flex flex-col xl:flex-row w-1/3 items-center justify-center xl:justify-normal space-y-2 xl:space-y-0 xl:space-x-5">
 
-                                    <input type="button" class="bg-blue-600 rounded border border-blue-600 hover:cursor-pointer hover:bg-blue-700 hover:border-white duration-150 text-lg font-semibold p-1 editBtn" data-id="{{ $appointment['id'] }}" value="Edit">
-                                    <input type="button" class="bg-red-600 rounded border border-red-600 hover:cursor-pointer hover:bg-red-700 hover:border-white duration-150 text-lg font-semibold p-1 deleteBtn" data-id="{{ $appointment['id'] }}" value="Delete">
+                                    <?php if($appointment['author']['user_id'] == $userID) {?>
+
+                                        <input type="button" class="bg-blue-500 border border-blue-500 rounded hover:cursor-pointer hover:bg-blue-700 hover:border-blue-700 duration-300 text-lg font-semibold p-1 editBtn" data-id="{{ $appointment['id'] }}" value="Edit">
+                                        <input type="button" class="bg-red-500 border border-red-500 rounded hover:cursor-pointer hover:bg-red-700 hover:border-red-700 duration-300 text-lg font-semibold p-1 deleteBtn" data-id="{{ $appointment['id'] }}" value="Delete">
+
+                                    <?php } else { ?>
+
+                                        <input type="button" class="bg-gray-500 border border-gray-500 rounded hover:cursor-not-allowed hover:bg-gray-700 hover:border-gray-700 duration-300 text-lg font-semibold p-1 LockedEditBtn" value="Edit">
+                                        <input type="button" class="bg-gray-500 border border-gray-500 rounded hover:cursor-not-allowed hover:bg-gray-700 hover:border-gray-700 duration-300 text-lg font-semibold p-1 LockedDeleteBtn" value="Delete">
+
+                                    <?php }?>
+
                                     
                                 </div>
                 
@@ -138,7 +179,7 @@
         {{-- Ventana modal: INICIO --}}
         <div id="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
 
-            <div class="modal-content bg-slate-700 p-6 rounded-lg max-w-md">
+            <div class="modal-content bg-slate-800 p-6 rounded max-w-md border border-slate-700">
 
                 <span class="close absolute top-0 right-0 px-3 py-2 cursor-pointer font-bold text-white bg-red-400 rounded-xl">X</span>
 
@@ -147,12 +188,12 @@
                 <form id="editForm">
 
                     <label for="modal-title" class="block mb-2">Title:</label>
-                    <input type="text" id="modal-title" name="modal-title" required class="w-full bg-slate-800 border border-slate-900 rounded px-3 py-2 mb-4">
+                    <input type="text" id="modal-title" name="modal-title" maxlength="20" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 mb-4">
 
                     <label for="modal-timePicker" class="block mb-2">Scheduled for:</label>
-                    <input type="datetime-local" id="modal-timePicker" name="modal-timePicker" required class="w-full bg-slate-800 border border-slate-900 rounded px-3 py-2 mb-4">
+                    <input type="datetime-local" id="modal-timePicker" name="modal-timePicker" required class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 mb-4">
 
-                    <input type="button" id="saveBtn" name="saveBtn" value="Save changes" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer duration-150">
+                    <input type="button" id="saveBtn" name="saveBtn" value="Save changes" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer duration-300">
 
                 </form>
 
@@ -163,9 +204,37 @@
 
 
 
+        {{-- Ventana de Dialogo: INICIO --}}
+        <div id="dialog" class="dialog hidden fixed inset-0 items-center z-50">
+
+            <div class="dialog-content bg-slate-800 p-6 rounded max-w-md mx-auto mt-20 border border-slate-700 flex flex-col items-center">
+
+                <h2 class="message mb-4"></h2>
+
+                <button class="closeDialog bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded duration-300">Close</button>
+
+            </div>
+
+        </div>
+        {{-- Ventana de Dialogo: FINAL --}}
+
+
+
         {{-- Scripts de JavaScript para interacciones: INICIO --}}
         <script>
 
+            // Validacion de sesion activa:
+            if(sessionStorage.getItem('token') === null)
+            {
+                window.location.href = '{{ route('login') }}';
+            }
+
+            // Obtenemos nuestra ventana de dialogo para mostrar mensajes:
+            const dialog = document.getElementById('dialog');
+            const messageElement = document.querySelector('.message');
+
+            
+            // Esta funcion ejecutara cuando cargue la pagina y contiene todas las demas funciones que requerimos para la interfaz:  
             document.addEventListener('DOMContentLoaded', function() {
 
                 /*  SOBRE EL FLATPICKR
@@ -199,14 +268,7 @@
 
                     eventColor: 'green',
 
-                    events: [
-
-                        // {
-                        //     title: 'All Day Event',
-                        //     start: '2024-06-01'
-                        // }
-
-                    ],
+                    events: [],
 
                     selectable: true,
                     select: function(dateInfo) 
@@ -242,13 +304,15 @@
                 // Funcion de REGISTRO de citas:
                 function registrarCita(infoCita)
                 {
+                    var user_id = sessionStorage.getItem('user_id');
+
                     // Datos de la cita a enviar al servidor:
 
                     var registerTitle = document.getElementById('registerTitle').value;
     
                     var citaData = {
     
-                        "user_id": 1,
+                        "user_id": user_id,
                         "title": registerTitle,
                         "scheduled_for": infoCita
     
@@ -257,7 +321,7 @@
     
                     // Token de sesion:
     
-                    var token = '1|NgHbeKzdsaYGtihHtw2CkseUYfggKx0DH0HyTzoG69c0c607';
+                    var token = sessionStorage.getItem('token');
     
     
                     // Configuracion de la peticion:
@@ -280,15 +344,17 @@
 
                     fetch('http://127.0.0.1:8000/api/v1/appointments', requestOptions)
                         .then(response => response.json())
-                        .then(result => console.log(result))
+                        .then(result => {
+
+                            messageElement.textContent = result.message;
+                            showDialog();
+
+                        })
                         .catch(error => {
     
-                            console.error('Error al enviar la solicitud: ', error);
-    
+                            console.error('An error occurred sending the request: ', error);
+
                         })
-
-                    window.location.reload();
-
                 }
 
 
@@ -298,7 +364,7 @@
                 {
                     // Token de sesion:
     
-                    var token = '1|NgHbeKzdsaYGtihHtw2CkseUYfggKx0DH0HyTzoG69c0c607';
+                    var token = sessionStorage.getItem('token');
     
     
                     // Configuracion de la peticion:
@@ -320,23 +386,20 @@
                     fetch('http://127.0.0.1:8000/api/v1/appointments/' + id, requestOptions)
                         .then(response => {
 
-                            if(response.ok) 
+                            if(response.ok)
                             {
-
-                                location.reload();
-
-                                console.log('Cita Eliminada');
-
-                            } 
-                            else 
-                            {
-                                console.log('Error al eliminar la cita: ', response.status)
+                                // Hacemos que el texto resultado de ejecutar la peticion se muestre en la ventana de dialogo:
+                                messageElement.textContent = 'Appointment deleted successfully';
+                                showDialog();
                             }
-
+                            else
+                            {
+                                console.log('Something went wrong deleting the appointment: ', response.status);
+                            }
                         })
                         .catch(error => {
 
-                            console.error('Error al enviar la solicitud: ', error)
+                            console.error('An error occurred sending the request: ', error)
 
                         })
                 }
@@ -347,11 +410,13 @@
                 function editarCita(id, title, dateTime)
                 {
 
+                    var user_id = sessionStorage.getItem('user_id');
+
                     // Nuevos datos de la cita a enviar al servidor:
                     
                     var editCitaData = {
 
-                        "user_id": 1,
+                        "user_id": user_id,
                         "title": title,
                         "scheduled_for": dateTime
 
@@ -359,7 +424,7 @@
 
                     // Token de sesion:
 
-                    var token = '1|NgHbeKzdsaYGtihHtw2CkseUYfggKx0DH0HyTzoG69c0c607';
+                    var token = sessionStorage.getItem('token');
 
 
                     // Configuracion de la peticion:
@@ -381,10 +446,18 @@
 
                     fetch('http://127.0.0.1:8000/api/v1/appointments/' + id, requestOptions)
                         .then(response => response.json())
-                        .then(result => console.log(result))
+                        .then(result => {
+
+                            // Hacemos que el texto resultado de ejecutar la peticion se muestre en la ventana de dialogo:
+                            messageElement.textContent = result.message;
+                            showDialog();
+                            
+                        })
                         .catch(error => {
 
-                            console.error('Error al enviar la solicitud: ', error);
+                            console.error('An error occurred sending the request: ', error);
+                            alert('An error occurred: ' + error);
+
                         })
                 }
 
@@ -397,7 +470,7 @@
 
                     try {
 
-                        var token = '1|NgHbeKzdsaYGtihHtw2CkseUYfggKx0DH0HyTzoG69c0c607';
+                        var token = sessionStorage.getItem('token');
 
                         var response = await fetch('http://127.0.0.1:8000/api/v1/appointments/' + id, {
 
@@ -492,6 +565,37 @@
 
 
 
+                // Obtenemos el cuadro de dialogo y realizamos las funciones que lo muestran y cierran:
+                var dialog = document.getElementById('dialog');
+                var closeDialogBtn = document.querySelector('.closeDialog');
+
+                function showDialog()
+                {
+                    dialog.classList.remove('hidden');
+                }
+
+                function closeDialog()
+                {
+                    dialog.classList.add('hidden');
+                    window.location.reload();
+                }
+
+                closeDialogBtn.addEventListener('click', function(){
+
+                    closeDialog();
+
+                });
+
+                window.addEventListener('click', function(event){
+
+                    if(event.target === dialog)
+                    {
+                        closeDialog();
+                    }
+                });
+
+
+
                 // Evento de Click para los botones de ELIMINAR cita:
                 document.querySelectorAll('.deleteBtn').forEach(item => {
 
@@ -524,11 +628,48 @@
 
                 })
 
+                // Evento CLICK en boton de LOGOUT:
+                document.getElementById('logoutBtn').addEventListener('click', event => {
+
+                    var token = sessionStorage.getItem('token');
+
+                    var requestOptions = {
+
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token,
+                            'Accept': 'application/json'
+                        }
+
+                    };
+
+                    fetch('http://127.0.0.1:8000/api/logout', requestOptions)
+                        .then(response => {
+
+                            if(response.ok)
+                            {
+
+                                sessionStorage.removeItem('token');
+                                window.location.href = '{{ route('login') }}';
+                            }
+                            else
+                            {
+                                console.log('Something went wrong loging out: ', response.status);
+                            }
+
+                        })
+                        .catch(error => {
+
+                            console.error('Error in the AJAX request: ', error);
+
+                        });
+                    
+                });
 
 
             });
             
-
         </script>
         {{-- Scripts de JavaScript para interacciones: FINAL --}}
 
